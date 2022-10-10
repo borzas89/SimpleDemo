@@ -3,4 +3,23 @@ plugins {
     id 'com.android.application' version '7.3.0' apply false
     id 'com.android.library' version '7.3.0' apply false
     id 'org.jetbrains.kotlin.android' version '1.7.10' apply false
+    id 'com.google.dagger.hilt.android' version '2.42' apply false
+}
+
+ext {
+    compileSdkVersion = 31
+    minSdkVersion = 15
+    targetSdkVersion = 31
+    supportLibVersion = '1.5.1'
+    coreVersion = '1.7.0'
+    recyclerViewVersion = '1.2.1'
+    constraintLayoutVersion = '2.1.4'
+    materialVersion = '1.6.1'
+    lifecycleVersion = '2.4.0'
+    roomVersion = '2.4.3'
+    pagingVersion = '3.1.0'
+    retrofitVersion = '2.9.0'
+    okhttpLoggingInterceptorVersion = '4.9.0'
+    coroutines = '1.5.2'
+    hiltVersion = '2.42'
 }
