@@ -6,12 +6,9 @@
     <data>
 
         <variable
-            name="photo"
-            type="com.example.simepledemo.model.Photo" />
-
-        <variable
             name="listener"
             type="com.example.simepledemo.ui.list.PhotoListener" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,14 +19,12 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:onClick="@{() -> listener.onPhotoClicked(photo)}"
-            app:image_url="@{photo.url}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/ic_launcher_background" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

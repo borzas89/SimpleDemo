@@ -1,13 +1,16 @@
 package com.example.simepledemo.util
 
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.simepledemo.R
 import com.example.simepledemo.base.BaseAdapter
 import com.example.simepledemo.base.BaseModel
+
 
 object BindingAdapters {
     /**
@@ -41,6 +44,12 @@ object BindingAdapters {
     fun submitList(recyclerView: RecyclerView, list: List<BaseModel>?) {
         val adapter = recyclerView.adapter as BaseAdapter<ViewDataBinding, BaseModel>?
         adapter?.updateData(list ?: listOf())
+    }
+
+    @JvmStatic
+    @InverseBindingAdapter(attribute = "android:text")
+    fun getValueFromBinding(view: TextView): String {
+        return view.text.toString()
     }
 
 

@@ -10,7 +10,7 @@
 
         <variable
             name="adapter"
-            type="com.example.simepledemo.ui.list.PhotosAdapter"/>
+            type="com.example.simepledemo.ui.list.PhotoAdapter"/>
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,13 +31,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
             <EditText
-                android:id="@+id/search_repo"
+                android:id="@+id/search_photo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/search_hint"
                 android:imeOptions="actionSearch"
                 android:inputType="textNoSuggestions"
                 android:selectAllOnFocus="true"
+                android:text="@={viewModel.queryFlow}"
                 tools:text="Android"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -47,14 +48,30 @@
             android:layout_height="0dp"
             android:paddingVertical="@dimen/row_item_margin_vertical"
             android:scrollbars="vertical"
-            app:setAdapter="@{adapter}"
-            app:submitList="@{viewModel.photosListLiveData}"
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/input_layout"
             tools:ignore="UnusedAttribute"/>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/prepend_progress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/append_progress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ProgressBar
             android:id="@+id/progress_bar"

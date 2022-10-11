@@ -5,41 +5,47 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.simepledemo.api.FlickrService
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.simepledemo.base.Event
+import com.example.simepledemo.data.PhotoRepository
 import com.example.simepledemo.model.Photo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
+
+private const val LAST_SEARCH_QUERY: String = "last_search_query"
+private const val DEFAULT_QUERY = "dog"
 
 @HiltViewModel
 class ListViewModel @Inject constructor(
-    private val flickrService: FlickrService
-): ViewModel(), PhotoListener {
-    private val mutablePhotosListLiveData = MutableLiveData<List<Photo>>()
-    val photosListLiveData: LiveData<List<Photo>> = mutablePhotosListLiveData
+    private val repository: PhotoRepository,
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel(), PhotoListener {
+    private val mutablePhotosList = MutableLiveData<PagingData<Photo>>()
+    val photosList: LiveData<PagingData<Photo>> = mutablePhotosList
+
     val showDetail = MutableLiveData<Event<Photo>>()
+    val queryFlow = MutableStateFlow(DEFAULT_QUERY)
+    val items: Flow<PagingData<Photo>>
+
 
     init {
-       loadPhotos()
-    }
-
-    fun loadPhotos(): LiveData<List<Photo>> {
-        viewModelScope.launch {
-            val searchResponse = flickrService.fetchImages()
-            val photosList = searchResponse.photos.photo.map { photo ->
-                Photo(
-                    id = photo.id,
-                    url = "https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg",
-                    title = photo.title
-                )
-            }
-            mutablePhotosListLiveData.postValue(photosList)
-        }
-        return photosListLiveData
+        val initialQuery: String = savedStateHandle[LAST_SEARCH_QUERY] ?: DEFAULT_QUERY
+        items = repository.getPhotosByName(initialQuery).cachedIn(viewModelScope)
     }
 
     override fun onPhotoClicked(photo: Photo) {
         showDetail.value = Event(photo)
     }
+
+    fun setCurrentQuery(query: String) {
+        queryFlow.value = query
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+    }
+
 }
