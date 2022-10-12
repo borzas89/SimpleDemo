@@ -1,8 +1,10 @@
 package com.example.simepledemo.api
 
+import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -23,10 +25,10 @@ interface FlickrService {
     suspend fun fetchImages(): PhotoSearchResponse
 
     @GET("?method=flickr.photos.search&format=json&nojsoncallback=1&api_key=${API_KEY}")
-    suspend fun fetchImagesByQuery(
+    fun fetchImagesByQuery(
         @Query("text") query: String,
         @Query("per_page") itemsPerPage: Int
-    ): PhotoSearchResponse
+    ): Single<PhotoSearchResponse>
 
     companion object {
         fun create(): FlickrService {
@@ -40,6 +42,7 @@ interface FlickrService {
                 .baseUrl(BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
                 .create(FlickrService::class.java)
         }

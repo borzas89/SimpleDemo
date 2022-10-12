@@ -38,7 +38,7 @@
                 android:imeOptions="actionSearch"
                 android:inputType="textNoSuggestions"
                 android:selectAllOnFocus="true"
-                android:text="@={viewModel.queryFlow}"
+                android:text="@={viewModel.searchText}"
                 tools:text="Android"/>
         </com.google.android.material.textfield.TextInputLayout>
 

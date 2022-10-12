@@ -5,32 +5,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.simepledemo.databinding.FragmentListBinding
 import com.example.simepledemo.navigator.AppNavigator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.stateIn
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class ListFragment: Fragment() {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ListViewModel by viewModels()
+
+    private val mDisposable = CompositeDisposable()
 
     @Inject
     lateinit var navigator: AppNavigator
@@ -48,19 +46,15 @@ class ListFragment: Fragment() {
         }
 
         val adapter = PhotoAdapter()
-        val items = viewModel.items
         binding.adapter = adapter
         binding.list.adapter = adapter
-        binding.list.layoutManager = GridLayoutManager(context,3)
+        binding.list.layoutManager = GridLayoutManager(context,2)
 
+        viewModel.getPhotos()
+            .subscribe {
+            adapter.submitData(lifecycle, it)
+        }.addTo(mDisposable)
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                items.collectLatest{
-                    adapter.submitData(it)
-                }
-            }
-        }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -83,5 +77,10 @@ class ListFragment: Fragment() {
                 navigator.navigateToDetail()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        mDisposable.dispose()
+        super.onDestroyView()
     }
 }
