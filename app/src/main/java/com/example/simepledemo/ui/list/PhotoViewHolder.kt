@@ -10,7 +10,10 @@ class PhotoViewHolder(
     private val binding: PhotoViewholderBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(photo: Photo) {
+    fun bind(photo: Photo, clickListener: PhotoItemListener) {
+        binding.imageView.setOnClickListener {
+           clickListener.onPhotoClicked(photo)
+        }
         binding.apply {
             Glide.with(imageView.context)
                 .load(photo.url)

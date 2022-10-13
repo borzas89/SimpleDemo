@@ -24,10 +24,16 @@ private const val DEBOUNCE_RATE_IN_MILLIS = 1500L
 class ListViewModel @Inject constructor(
     private val repository: PhotoRepository,
     private val savedStateHandle: SavedStateHandle
-) : BaseViewModel(), PhotoListener {
+) : BaseViewModel(), PhotoItemListener {
     val showDetail = MutableLiveData<Event<Photo>>()
 
     val searchText = ObservableField(savedStateHandle[LAST_SEARCH_QUERY] ?: DEFAULT_QUERY)
+
+    init {
+        if (savedStateHandle.contains(LAST_SEARCH_QUERY)) {
+            searchText.set(savedStateHandle[LAST_SEARCH_QUERY])
+        }
+    }
 
     fun getPhotos(): Flowable<PagingData<Photo>> =
         searchText

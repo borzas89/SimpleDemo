@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.example.simepledemo.databinding.PhotoViewholderBinding
 import com.example.simepledemo.model.Photo
 
-class PhotoAdapter(
+class PhotoAdapter(private val listener: PhotoItemListener
 ) : PagingDataAdapter<Photo, PhotoViewHolder>(PHOTO_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder =
@@ -22,7 +22,7 @@ class PhotoAdapter(
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
         val tile = getItem(position)
         if (tile != null) {
-            holder.bind(tile)
+            holder.bind(tile, clickListener = listener)
         }
     }
 
@@ -35,4 +35,8 @@ class PhotoAdapter(
                 oldItem == newItem
         }
     }
+}
+
+interface PhotoItemListener {
+    fun onPhotoClicked(photo: Photo)
 }

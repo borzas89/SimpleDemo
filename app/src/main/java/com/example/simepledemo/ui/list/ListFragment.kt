@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class ListFragment: Fragment() {
+class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ListViewModel by viewModels()
@@ -45,15 +45,27 @@ class ListFragment: Fragment() {
             lifecycleOwner = this@ListFragment
         }
 
-        val adapter = PhotoAdapter()
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val adapter = PhotoAdapter(viewModel)
         binding.adapter = adapter
         binding.list.adapter = adapter
-        binding.list.layoutManager = GridLayoutManager(context,2)
+        binding.list.layoutManager = GridLayoutManager(context, 2)
 
         viewModel.getPhotos()
             .subscribe {
-            adapter.submitData(lifecycle, it)
-        }.addTo(mDisposable)
+                adapter.submitData(lifecycle, it)
+            }.addTo(mDisposable)
+
+        viewModel.showDetail.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let {
+                navigator.navigateToDetail()
+            }
+        }
 
 
         lifecycleScope.launch {
@@ -62,19 +74,6 @@ class ListFragment: Fragment() {
                     binding.prependProgress.isVisible = it.source.prepend is LoadState.Loading
                     binding.appendProgress.isVisible = it.source.append is LoadState.Loading
                 }
-            }
-        }
-
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.showDetail.observe(viewLifecycleOwner){
-            it.getContentIfNotHandled()?.let {
-                // TODO remove, just test navigation
-                navigator.navigateToDetail()
             }
         }
     }
