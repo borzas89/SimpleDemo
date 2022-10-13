@@ -8,10 +8,6 @@
             name="viewModel"
             type="com.example.simepledemo.ui.list.ListViewModel"/>
 
-        <variable
-            name="adapter"
-            type="com.example.simepledemo.ui.list.PhotoAdapter"/>
-
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

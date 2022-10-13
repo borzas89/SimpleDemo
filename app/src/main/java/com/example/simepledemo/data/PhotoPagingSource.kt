@@ -3,6 +3,7 @@ package com.example.simepledemo.data
 import androidx.paging.PagingState
 import androidx.paging.rxjava2.RxPagingSource
 import com.example.simepledemo.api.FlickrService
+import com.example.simepledemo.database.AppDatabase
 import com.example.simepledemo.model.Photo
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -12,7 +13,8 @@ private const val STARTING_KEY = 0
 
 class PhotoPagingSource @Inject constructor(
     private val service: FlickrService,
-    private val query: String
+    private val query: String,
+    private val database: AppDatabase
 ): RxPagingSource<Int, Photo>() {
 
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, Photo>> {
@@ -29,12 +31,15 @@ class PhotoPagingSource @Inject constructor(
                         title = photo.title
                     )
                 }
+
             }
             .map { toLoadResult(it, position) }
             .onErrorReturn { LoadResult.Error(it) }
     }
 
-    private fun toLoadResult(data: List<Photo> , position: Int): LoadResult<Int, Photo> {
+    private fun toLoadResult(data: List<Photo>, position: Int): LoadResult<Int, Photo> {
+        // TODO delete from here... just to test db saving
+        database.photoDao().save(photos = data).subscribe()
         return LoadResult.Page(
             data = data,
             prevKey = if (position == STARTING_KEY) null else position,

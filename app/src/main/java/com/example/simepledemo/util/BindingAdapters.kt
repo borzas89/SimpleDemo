@@ -4,12 +4,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
-import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.simepledemo.R
-import com.example.simepledemo.base.BaseAdapter
-import com.example.simepledemo.base.BaseModel
 
 
 object BindingAdapters {
@@ -24,26 +20,6 @@ object BindingAdapters {
             .placeholder(R.drawable.ic_launcher_background)
             .fitCenter()
             .into(imageView)
-    }
-
-
-    @JvmStatic
-    @BindingAdapter("setAdapter")
-    fun setAdapter(
-        recyclerView: RecyclerView,
-        adapter: BaseAdapter<ViewDataBinding, BaseModel>?
-    ) {
-        adapter?.let {
-            recyclerView.adapter = it
-        }
-    }
-
-    @JvmStatic
-    @Suppress("UNCHECKED_CAST")
-    @BindingAdapter("submitList")
-    fun submitList(recyclerView: RecyclerView, list: List<BaseModel>?) {
-        val adapter = recyclerView.adapter as BaseAdapter<ViewDataBinding, BaseModel>?
-        adapter?.updateData(list ?: listOf())
     }
 
     @JvmStatic

@@ -52,7 +52,6 @@ class ListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = PhotoAdapter(viewModel)
-        binding.adapter = adapter
         binding.list.adapter = adapter
         binding.list.layoutManager = GridLayoutManager(context, 2)
 
@@ -62,11 +61,10 @@ class ListFragment : Fragment() {
             }.addTo(mDisposable)
 
         viewModel.showDetail.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let {
-                navigator.navigateToDetail()
+            it.getContentIfNotHandled()?.let { photo ->
+                navigator.navigateToDetail(photo.id, photo.url)
             }
         }
-
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
