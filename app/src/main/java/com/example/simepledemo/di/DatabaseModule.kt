@@ -26,4 +26,8 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun providePhotosDao(database: AppDatabase) = database.photoDao()
+
+    @Provides
+    @Singleton
+    fun providePhotoRemoteKeysDao(database: AppDatabase) = database.photoRemoteKeysDao()
 }

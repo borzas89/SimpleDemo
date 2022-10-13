@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.simepledemo.model.Photo
+
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable
@@ -27,4 +28,7 @@ interface PhotoDao {
 
     @Query("SELECT * FROM photos WHERE title LIKE :queryString")
     fun getByName(queryString: String): PagingSource<Int, Photo>
+
+    @Query("SELECT * FROM photos ORDER BY id ASC")
+    fun selectAll(): PagingSource<Int, Photo>
 }
