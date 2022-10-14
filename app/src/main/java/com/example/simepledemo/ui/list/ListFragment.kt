@@ -21,7 +21,6 @@ import io.reactivex.rxkotlin.addTo
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
 class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
@@ -76,8 +75,9 @@ class ListFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        mDisposable.dispose()
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
+        mDisposable.clear()
     }
+
 }
