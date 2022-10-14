@@ -38,7 +38,6 @@ class ListFragment : Fragment() {
         _binding = FragmentListBinding.inflate(inflater, container, false)
         binding.apply {
             viewModel = this@ListFragment.viewModel
-            lifecycleOwner = this@ListFragment
         }
 
         return binding.root

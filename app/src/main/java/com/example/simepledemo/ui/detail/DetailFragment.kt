@@ -24,7 +24,6 @@ class DetailFragment: Fragment() {
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
         binding.apply {
             viewModel = this@DetailFragment.viewModel
-            lifecycleOwner = this@DetailFragment
         }
         return binding.root
     }

@@ -31,8 +31,11 @@ class PhotoPagingSource @Inject constructor(
     }
 
     private fun toLoadResult(data: List<Photo>, position: Int): LoadResult<Int, Photo> {
-        // TODO delete from here... just to test db saving
-        database.photoDao().save(photos = data).subscribe()
+        // TODO delete from here... just to test db saving - use RemoteMediator instead...
+        database.photoDao().save(photos = data)
+            .observeOn(Schedulers.io())
+            .subscribe()
+
         return LoadResult.Page(
             data = data,
             prevKey = if (position == STARTING_KEY) null else position,

@@ -7,7 +7,7 @@ Used technologies, libraries:
 - Rx
 - ViewModel, LiveData
 - Databinding
-- JetPack Navigation
+- JetPack Navigation, DataStore
 - Paging
 - Room
 - Retrofit
