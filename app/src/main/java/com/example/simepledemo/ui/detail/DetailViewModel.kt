@@ -20,7 +20,6 @@ class DetailViewModel @Inject constructor(
 ) : BaseViewModel() {
     private val _photo = MutableLiveData<Photo>()
     val photo: LiveData<Photo> = _photo
-
     val imageUrl = ObservableField<String>()
 
     init {
