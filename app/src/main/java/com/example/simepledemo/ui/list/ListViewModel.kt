@@ -13,6 +13,7 @@ import com.example.simepledemo.model.Photo
 import com.example.simepledemo.util.RxUtil.toFlowable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Flowable
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -39,6 +40,7 @@ class ListViewModel @Inject constructor(
         searchText
             .toFlowable()
             .distinctUntilChanged()
+            .observeOn(Schedulers.io())
             .debounce(DEBOUNCE_RATE_IN_MILLIS, TimeUnit.MILLISECONDS)
             .flatMap {
                 savedStateHandle[LAST_SEARCH_QUERY] = it

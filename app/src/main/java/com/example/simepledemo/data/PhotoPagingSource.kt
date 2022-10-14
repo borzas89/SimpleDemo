@@ -14,7 +14,8 @@ private const val STARTING_KEY = 0
 class PhotoPagingSource @Inject constructor(
     private val service: FlickrService,
     private val query: String,
-    private val database: AppDatabase
+    private val database: AppDatabase,
+    private val mapper: PhotoDtoToModelMapper
 ): RxPagingSource<Int, Photo>() {
 
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, Photo>> {
@@ -23,15 +24,7 @@ class PhotoPagingSource @Inject constructor(
         return service.fetchImagesByQuery(query, position)
             .subscribeOn(Schedulers.io())
             .map {
-                // TODO mapper...
-                it.photos.photo.map { photo ->
-                    Photo(
-                        id = photo.id,
-                        url = "https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg",
-                        title = photo.title
-                    )
-                }
-
+                mapper.map(it.photos.photo)
             }
             .map { toLoadResult(it, position) }
             .onErrorReturn { LoadResult.Error(it) }

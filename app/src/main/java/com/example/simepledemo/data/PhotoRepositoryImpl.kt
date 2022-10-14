@@ -15,7 +15,8 @@ import javax.inject.Inject
 
 class PhotoRepositoryImpl @Inject constructor(
     private val database: AppDatabase,
-    private val service: FlickrService
+    private val service: FlickrService,
+    private val mapper: PhotoDtoToModelMapper
 ) : PhotoRepository {
 
     companion object {
@@ -29,7 +30,7 @@ class PhotoRepositoryImpl @Inject constructor(
                 enablePlaceholders = false,
                 prefetchDistance = 5
             ),
-            pagingSourceFactory = { PhotoPagingSource(service, query,database) }
+            pagingSourceFactory = { PhotoPagingSource(service, query,database,mapper) }
         ).flowable
     }
 
